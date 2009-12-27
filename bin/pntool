@@ -1,0 +1,6 @@
+#!ruby 
+
+require 'pano'
+
+set = Pano::ImageFileSet.new FileUtils.pwd
+set.spit_and_copy_files
