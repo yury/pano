@@ -61,7 +61,7 @@ module Pano
             system "convert #{fused} #{TOOL_ROOT}/lib/mask.png \
                       +matte -compose CopyOpacity -composite \
                       #{fused}"
-          elsif i == 13
+          elsif i == pano.length
             system "convert #{fused} #{TOOL_ROOT}/lib/mask_last.png \
                       +matte -compose CopyOpacity -composite \
                       #{fused}"
