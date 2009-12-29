@@ -4,7 +4,7 @@ module Pano
   module Image
 
     def read_info file_path
-      json = `exiftool -d "%Y-%m-%d %H:%M:%S %z" -j '#{file_path}' 2>&1`
+      json = `exiftool -d "%Y-%m-%d %H:%M:%S %z" -j #{file_path} 2>&1`
 
       return {:error => "File not found"} if json =~ /^File not found/i  
 
