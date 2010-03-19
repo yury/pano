@@ -1,6 +1,7 @@
-#!ruby 
+#!/usr/bin/env ruby 
 
 require 'pano'
+require 'fileutils'
 
 set = Pano::ImageFileSet.new FileUtils.pwd
-set.spit_and_copy_files
+set.spit_and_copy_files ARGV.include?("apply_mask")

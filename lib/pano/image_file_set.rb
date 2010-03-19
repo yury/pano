@@ -44,7 +44,7 @@ module Pano
       [panos, misc]
     end
     
-    def spit_and_copy_files
+    def spit_and_copy_files apply_mask = false
       puts "analysing files..."
       panos, misc = split_images
       panos.each_with_index do |pano, index|
@@ -57,14 +57,16 @@ module Pano
         pano.each_slice(3) do |files|
           i+=1
           fused = enfuse(File.join(pano_dir, "fused"), "%02d" % i, files)
-          if (1..6).include? i
-            system "convert #{fused} #{TOOL_ROOT}/lib/mask.png \
-                      +matte -compose CopyOpacity -composite \
-                      #{fused}"
-          elsif i >= pano.length
-            system "convert #{fused} #{TOOL_ROOT}/lib/mask_last.png \
-                      +matte -compose CopyOpacity -composite \
-                      #{fused}"
+          if apply_mask
+            if (1..6).include? i
+              system "convert #{fused} #{TOOL_ROOT}/lib/mask.png \
+                        +matte -compose CopyOpacity -composite \
+                        #{fused}"
+            elsif i >= pano.length
+              system "convert #{fused} #{TOOL_ROOT}/lib/mask_last.png \
+                        +matte -compose CopyOpacity -composite \
+                        #{fused}"
+            end
           end
           system "mogrift -rotate -90 #{fused}"
           system "exiftool -overwrite_original -TagsFromFile #{files.first.jpg_path} #{fused}"
