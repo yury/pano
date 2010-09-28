@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby 
 
-require 'pano'
+require "bundler/setup"
 require 'fileutils'
 
 set = Pano::ImageFileSet.new FileUtils.pwd

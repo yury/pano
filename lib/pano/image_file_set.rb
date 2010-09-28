@@ -2,6 +2,7 @@ module Pano
 
   class ImageFileSet
     
+    BRACKETS = 5
     attr_reader :base_path, :files
     
     def initialize dir_path
@@ -19,7 +20,7 @@ module Pano
       while i < @files.length 
         file = @files[i]
         if file.for_pano?
-          if pano.length < 13 * 3
+          if pano.length < 13 * BRACKETS
             pano << file
           else
             last = pano.last
@@ -54,7 +55,7 @@ module Pano
           file.copy_to pano_dir
         end
         i = 0
-        pano.each_slice(3) do |files|
+        pano.each_slice(BRACKETS) do |files|
           i+=1
           fused = enfuse(File.join(pano_dir, "fused"), "%02d" % i, files)
           if apply_mask
@@ -84,13 +85,14 @@ module Pano
     def enfuse dir, name, files = []
       return if files.blank?
       FileUtils.mkpath dir
-      contrast_weight = 0.6
-      entropy_weight = 0.4
-      exposure_weight = 0.5
-      saturation_weight = 0.2
+#      contrast_weight = 0.6
+#      entropy_weight = 0.4
+#      exposure_weight = 0.5
+#      saturation_weight = 0.2
       target = File.join(dir, name + ".tif")
       input = files.map {|file| file.jpg_path }.join(" ")
-      options = "--contrast-weight=#{contrast_weight} --entropy-weight=#{entropy_weight} --exposure-weight=#{exposure_weight} --saturation-weight=#{saturation_weight} --compression=LZW"
+      #options = "--contrast-weight=#{contrast_weight} --entropy-weight=#{entropy_weight} --exposure-weight=#{exposure_weight} --saturation-weight=#{saturation_weight} --compression=LZW"
+      options = "--compression=LZW"
       system "enfuse #{options} -o #{target} #{input}"
 
       target

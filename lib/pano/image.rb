@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'active_support'
 
 module Pano
   module Image

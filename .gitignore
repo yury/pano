@@ -1,3 +1,6 @@
 .DS_Store
 spec/fixtures/33
+spec/fixtures/hrap
+.bundle
+.idea
 *.gem

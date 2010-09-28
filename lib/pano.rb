@@ -1,5 +1,5 @@
 require 'JSON'
-require 'active_support'
+require 'active_support/core_ext/object'
 
 TOOL_ROOT = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 

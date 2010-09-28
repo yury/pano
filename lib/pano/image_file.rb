@@ -7,10 +7,10 @@ module Pano
     def initialize path
       if path =~ /\.jpg$/i
         @jpg_path = path
-        @raw_path = path.sub(/\.jpg$/i, ".CR2")
+        @raw_path = path.sub(/\.jpg$/i, ".NEF")
       else
         @raw_path = path
-        @jpg_path = path.sub(/\.cr2$/i, ".JPG")
+        @jpg_path = path.sub(/\.nef$/i, ".JPG")
       end
       
       if File.exist?(@jpg_path)
@@ -23,16 +23,11 @@ module Pano
     end
     
     def for_pano?
-      @for_pano ||= @info[:fov] > 95 && @info["SelfTimer"] == "2 s" && @info["Orientation"] == "Rotate 270 CW"
+      @for_pano ||= @info[:fov] > 95 && bracketed?
     end
     
     def bracketed?
-      @bracketed ||= @info["BracketMode"] == "AEB" && @info["BracketShotNumber"] == 0
-    end
-    
-    def bracketing_number
-      b = @info["BracketValue"]
-      b == 0 ? 0 : b < 0 ? 1 : 2
+      @bracketed ||= @info["ShootingMode"] =~ /Bracketing/i
     end
     
     def list_info
@@ -46,7 +41,7 @@ module Pano
     end
     
     def copy_to dest_dir
-      FileUtils.mkpath dest_dir;
+      FileUtils.mkpath dest_dir
       FileUtils.cp(@raw_path, dest_dir) if File.exist?(@raw_path)
       FileUtils.cp(@jpg_path, dest_dir) if File.exist?(@jpg_path)
     end
