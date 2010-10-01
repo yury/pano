@@ -57,6 +57,7 @@ module Pano
         i = 0
         pano.each_slice(BRACKETS) do |files|
           i+=1
+          pngs(File.join(pano_dir, "png"), "%02d" % i, files.first)
           fused = enfuse(File.join(pano_dir, "fused"), "%02d" % i, files)
           if apply_mask
             if (1..6).include? i
@@ -80,6 +81,17 @@ module Pano
         file.copy_to misc_dir
       end
       
+    end
+
+    def pngs dir, name, file
+      FileUtils.mkpath dir
+      target = File.join(dir, name + ".png").to_s
+      cmd = "convert #{file.jpg_path} #{target}"
+
+      puts "-----------------"
+      puts cmd
+      puts "-----------------"
+      system cmd
     end
     
     def enfuse dir, name, files = []
